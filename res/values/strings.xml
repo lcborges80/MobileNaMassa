@@ -21,5 +21,6 @@
 	<string name="periodTextViewText">Period:</string>
 	<string name="frequencyTextViewText">Frequency on Period:</string>
 	<string name="frequencyEditTextHint">Please, type the frequency on selected period</string>
+	<string name="noSettingsMessage">"Please, go to the settings menu and fill your Github parameters."</string>
 
 </resources>

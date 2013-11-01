@@ -13,12 +13,12 @@ import android.widget.Toast;
 
 public class SettingsActivity extends Activity {
 
-	private static final String MY_SHAREDPREFERENCES = "MySharedPreferences";
-	private static final String USERNAME = "username";
-	private static final String PASSWORD = "password";
-	private static final String REPOSITORY = "reposotory";
-	private static final String PERIOD = "preriod";
-	private static final String FREQUENCY = "frequency";
+	public static final String MY_SHAREDPREFERENCES = "MySharedPreferences";
+	public static final String USERNAME = "username";
+	public static final String PASSWORD = "password";
+	public static final String REPOSITORY = "reposotory";
+	public static final String PERIOD = "period";
+	public static final String FREQUENCY = "frequency";
 
 	private SharedPreferences sharedPreferences;
 	private EditText username;
