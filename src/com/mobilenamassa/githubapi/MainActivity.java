@@ -1,72 +1,51 @@
 package com.mobilenamassa.githubapi;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
-
-import org.apache.commons.io.IOUtils;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.kevinsawicki.http.HttpRequest;
 import com.google.gson.Gson;
 import com.mobilenamassa.githubapi.model.MainCommit;
 
 public class MainActivity extends Activity {
 
 	private AlertDialog downloadMessage;
-	
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
-        setTitle("Github Commits");
-        this.downloadMessage = createDialog("Downloading commits...", true);
-    }
-    
-    public void getAllCommits(View view) {
-    	 new AsyncTask<Void, Void, String>() {
 
-    		@Override
-    		protected void onPreExecute() {
-    			super.onPreExecute();
-    			downloadMessage.show();
-    		}
-    		
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main_activity);
+		setTitle("Github Commits");
+		this.downloadMessage = createDialog("Downloading commits...", true);
+	}
+
+	public void getAllCommits(View view) {
+		new AsyncTask<Void, Void, HttpRequest>() {
+
 			@Override
-			protected String doInBackground(Void... params) {
-				InputStream inputStream = null;
-				HttpsURLConnection httpsURLConnection = null;
-				try {
-					URL url = new URL("https://api.github.com/repos/lcborges80/MobileNaMassa/commits");
-					httpsURLConnection = (HttpsURLConnection) url.openConnection();
-					inputStream = httpsURLConnection.getInputStream();
-					byte[] data = IOUtils.toByteArray(inputStream);					
-					return new String(data);
-				} catch (Exception e) {
-					return null;
-				} finally {
-					if (inputStream != null) {
-						try {
-							inputStream.close();
-						} catch (IOException e) {
-						}
-					}
-					if (httpsURLConnection != null) {
-						httpsURLConnection.disconnect();
-					}
-				}				
+			protected void onPreExecute() {
+				super.onPreExecute();
+				downloadMessage.show();
+			}
+
+			@Override
+			protected HttpRequest doInBackground(Void... params) {
+				HttpRequest httpRequest = HttpRequest.get("https://api.github.com/repos/lcborges80/MobileNaMassa/commits", true, "since", "2013-12-01T02:00:00Z", "author", "lcborges80");
+				httpRequest.basic("mnmworkshop", "mnm_pass2013");
+				Log.i("MyTAG", httpRequest.header("X-RateLimit-Remaining"));
+				return httpRequest;
 			}
 			
-			protected void onPostExecute(String result) {
+			@Override
+			protected void onPostExecute(HttpRequest request) {
 				downloadMessage.dismiss();
+				String result = request.body();
 				if (TextUtils.isEmpty(result)) {
 					createDialog("Connection or JSON Parse error", false).show();
 				} else {
@@ -83,24 +62,24 @@ public class MainActivity extends Activity {
 					createDialog(bufferMessage.toString(), false).show();
 				}
 			}
-			
+
 		}.execute();
-    }
-    
-    private AlertDialog createDialog(String message, boolean isDownloadDialog) {
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Message");
-    	AlertDialog alertDialog;
-    	if (isDownloadDialog) {
-    		View view = getLayoutInflater().inflate(R.layout.data_download, null);
-    		((TextView) view.findViewById(R.id.downloadMessage)).setText(message);
-    		alertDialog = builder.create();
-    		alertDialog.setView(view);
-    	} else {
-    		builder.setMessage(message);
-    		alertDialog = builder.create();
-    	}
-    	return alertDialog;
-    }
+	}
+
+	private AlertDialog createDialog(String message, boolean isDownloadDialog) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Message");
+		AlertDialog alertDialog;
+		if (isDownloadDialog) {
+			View view = getLayoutInflater().inflate(R.layout.data_download, null);
+			((TextView) view.findViewById(R.id.downloadMessage)).setText(message);
+			alertDialog = builder.create();
+			alertDialog.setView(view);
+		} else {
+			builder.setMessage(message);
+			alertDialog = builder.create();
+		}
+		return alertDialog;
+	}
 
 }
