@@ -1,6 +1,6 @@
 package com.mobilenamassa.githubapi.model;
 
-public class MainCommit {
+public class Commits {
 
 	private String sha;
 	private Commit commit;

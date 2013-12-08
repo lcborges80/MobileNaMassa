@@ -10,5 +10,28 @@
         android:text="@string/verifyCommitsOnGithubButtonText"
         android:onClick="verifyCommits">
     </Button>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="10sp"
+        android:text="@string/totalCommitsForPeriodTextViewText"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp">
+    </TextView>
+    
+    <TextView
+        android:id="@+id/numberOfCommitsForPeriod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="80sp"
+        android:text="1000"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp">
+    </TextView>
+    
+    
 
 </LinearLayout>

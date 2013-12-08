@@ -4,29 +4,21 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.kevinsawicki.http.HttpRequest;
-import com.google.gson.Gson;
 import com.mobilenamassa.githubapi.R;
-import com.mobilenamassa.githubapi.R.id;
-import com.mobilenamassa.githubapi.R.layout;
-import com.mobilenamassa.githubapi.R.menu;
-import com.mobilenamassa.githubapi.R.string;
 import com.mobilenamassa.githubapi.business.GithubCommitsManager;
-import com.mobilenamassa.githubapi.model.MainCommit;
+import com.mobilenamassa.githubapi.model.Commits;
 
 public class MainActivity extends Activity {
 
 	private SharedPreferences sharedPreferences;
+	private TextView numberOfCommitsForPeriod;
 	private AlertDialog downloadMessage;
 
 	@Override
@@ -34,6 +26,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity);
 		this.sharedPreferences = getSharedPreferences(SettingsActivity.MY_SHAREDPREFERENCES, MODE_PRIVATE);
+		this.numberOfCommitsForPeriod = (TextView) findViewById(R.id.numberOfCommitsForPeriod);
 		this.downloadMessage = createDialog("Downloading commits...", true);
 	}
 
@@ -57,7 +50,22 @@ public class MainActivity extends Activity {
 		if (this.sharedPreferences.getAll().isEmpty()) {
 			Toast.makeText(this, getResources().getString(R.string.noSettingsMessage), Toast.LENGTH_LONG).show();
 		} else {
-			new GithubCommitsManager().getDateISO8601Format(this.sharedPreferences.getInt(SettingsActivity.PERIOD, 0));
+			GithubCommitsManager githubCommitsManager = new GithubCommitsManager(this);
+			int period = this.sharedPreferences.getInt(SettingsActivity.PERIOD, 0);
+			String username = this.sharedPreferences.getString(SettingsActivity.USERNAME, "");
+			String password = this.sharedPreferences.getString(SettingsActivity.PASSWORD, "");
+			String repository = this.sharedPreferences.getString(SettingsActivity.REPOSITORY, "");
+			String startDate = githubCommitsManager.getStartDateISO8601Format(period);
+			String url = githubCommitsManager.createUrl(username, repository);
+			
+			try {
+				Commits[] commits = githubCommitsManager.getCommitsForPeriod(url, password, startDate);
+				this.numberOfCommitsForPeriod.setText(String.valueOf(commits.length));
+			} catch (Exception exception) {
+				this.numberOfCommitsForPeriod.setText(exception.toString());
+			}
+			
+			
 			
 //			new AsyncTask<Void, Void, HttpRequest>() {
 //
