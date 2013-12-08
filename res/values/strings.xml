@@ -8,7 +8,6 @@
     </string-array>
 	
     <string name="app_name">Mobile Na Massa - Guithub API</string>
-	<string name="desiredCommitsFrequencyEditTextHint">Desired Commits Frequency</string>
 	<string name="verifyCommitsOnGithubButtonText">Verify Commits on Github</string>
 	<string name="usernameTextViewText">Username:</string>
 	<string name="passwordTextViewText">Password:</string>
@@ -17,6 +16,10 @@
 	<string name="passwordEditTextHint">Please, type your Github password</string>
 	<string name="repositoryEditTextHint">Please, type your repository on Github</string>
 	<string name="saveButtonText">Save</string>
-	<string name="usernamePasswordRepositoryMandatoryMessage">Please, fill the username, password and repository fields.</string>
+	<string name="usernamePasswordRepositoryFrequencyMandatoryMessage">Please, fill the username, password, repository and frequency fields.</string>
+	<string name="settingsMenu">Settings</string>
+	<string name="periodTextViewText">Period:</string>
+	<string name="frequencyTextViewText">Frequency on Period:</string>
+	<string name="frequencyEditTextHint">Please, type the frequency on selected period</string>
 
 </resources>

@@ -4,20 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
     
-    <Spinner
-        android:id="@+id/desiredCommitsPeriod"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-    </Spinner>
-    
-    <EditText
-        android:id="@+id/desiredCommitsFrequency"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="@string/desiredCommitsFrequencyEditTextHint">
-    </EditText>    
-    
     <Button
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"

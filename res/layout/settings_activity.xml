@@ -46,6 +46,33 @@
         android:hint="@string/repositoryEditTextHint">
     </EditText>
     
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/periodTextViewText">
+    </TextView>
+    
+    <Spinner
+        android:id="@+id/period"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/desiredCommitsPeriod">"
+    </Spinner>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/frequencyTextViewText">
+    </TextView>
+    
+    <EditText
+        android:id="@+id/frequency"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="@string/frequencyEditTextHint">
+    </EditText>
+    
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
