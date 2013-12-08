@@ -25,5 +25,7 @@
 	<string name="periodIllegalArgumentException">The period must be DAILY_PERIOD, WEEKLY_PERIOD or MONTHLY_PERIOD.</string>
 	<string name="urlIllegalArgumentException">"None of the fields can be empty."</string>
 	<string name="totalCommitsForPeriodTextViewText">"Total Commits for Period"</string>
+	<string name="dialogTitle">Message</string>
+	<string name="dialogDownload">Downloading commits</string>
 
 </resources>

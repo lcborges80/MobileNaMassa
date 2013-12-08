@@ -5,33 +5,39 @@
     android:orientation="vertical">
     
     <Button
+        android:id="@+id/verifyCommits"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:text="@string/verifyCommitsOnGithubButtonText"
         android:onClick="verifyCommits">
     </Button>
     
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="10sp"
-        android:text="@string/totalCommitsForPeriodTextViewText"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="20dp">
-    </TextView>
-    
-    <TextView
-        android:id="@+id/numberOfCommitsForPeriod"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="80sp"
-        android:text="1000"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="20dp">
-    </TextView>
-    
-    
+    <LinearLayout
+        android:id="@+id/resultContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+        
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textStyle="bold"
+	        android:textSize="10sp"
+	        android:text="@string/totalCommitsForPeriodTextViewText"
+	        android:layout_marginBottom="20dp">
+	    </TextView>
+	    
+	    <TextView
+	        android:id="@+id/numberOfCommitsForPeriod"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textStyle="bold"
+	        android:textSize="80sp"
+	        android:layout_marginBottom="20dp">
+	    </TextView>        
+        
+    </LinearLayout>
 
 </LinearLayout>
