@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.kevinsawicki.http.HttpRequest;
@@ -16,16 +18,27 @@ import com.mobilenamassa.githubapi.model.MainCommit;
 public class MainActivity extends Activity {
 
 	private AlertDialog downloadMessage;
+	private Spinner desiredCommitsPeriod;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity);
 		setTitle("Github Commits");
+		
+		loadDesiredCommitsPeriodSpinner();
+		
 		this.downloadMessage = createDialog("Downloading commits...", true);
 	}
+	
+	private void loadDesiredCommitsPeriodSpinner() {
+		this.desiredCommitsPeriod = (Spinner) findViewById(R.id.desiredCommitsPeriod);
+		ArrayAdapter<CharSequence> desiredCommitsPeriodAdapter = ArrayAdapter.createFromResource(this, R.array.desiredCommitsPeriod, android.R.layout.simple_spinner_item);
+		desiredCommitsPeriodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		this.desiredCommitsPeriod.setAdapter(desiredCommitsPeriodAdapter);
+	}
 
-	public void getAllCommits(View view) {
+	public void verifyCommits(View view) {
 		new AsyncTask<Void, Void, HttpRequest>() {
 
 			@Override

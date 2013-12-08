@@ -1,8 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">MobileNaMassa</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
-    <string name="title_activity_main_activity">MainActivity</string>
+	<string-array name="desiredCommitsPeriod">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
+	
+    <string name="app_name">Mobile Na Massa - Guithub API</string>
+	<string name="desiredCommitsFrequencyEditTextHint">Desired Commits Frequency</string>
+	<string name="verifyCommitsOnGithubButtonText">Verify Commits on Github</string>
+	<string name="usernameTextViewText">Username:</string>
+	<string name="passwordTextViewText">Password:</string>
+	<string name="repositoryTextViewText">Repository:</string>
+	<string name="usernameEditTextHint">Please, type your Github username</string>
+	<string name="passwordEditTextHint">Please, type your Github password</string>
+	<string name="repositoryEditTextHint">Please, type your repository on Github</string>
+	<string name="saveButtonText">Save</string>
+	<string name="usernamePasswordRepositoryMandatoryMessage">Please, fill the username, password and repository fields.</string>
 
 </resources>
