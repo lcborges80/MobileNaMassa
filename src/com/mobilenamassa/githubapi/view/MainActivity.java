@@ -110,20 +110,18 @@ public class MainActivity extends Activity {
 				protected void onPostExecute(Void result) {
 					downloadMessage.dismiss();
 					if (numberOfCommits > -1) {
-						
 						int frequency = Integer.parseInt(sharedPreferences.getString(SettingsActivity.FREQUENCY, "0"));
 						if (numberOfCommits == frequency) {
 							commitsResult.setText(R.string.equalsThanCommitsLimit);
-							
+							commitsResult.setTextColor(getResources().getColor(R.color.yellow));
 						} else if (numberOfCommits > frequency) {
 							commitsResult.setText(R.string.moreThanCommitsLimit);
-							
+							commitsResult.setTextColor(getResources().getColor(R.color.green));
 						} else {
 							commitsResult.setText(R.string.lessThanCommitsLimit);
-							
+							commitsResult.setTextColor(getResources().getColor(R.color.red));
 						}
-					}
-					
+					}					
 					verifyCommits.setEnabled(true);
 					resultContainer.setVisibility(View.VISIBLE);
 				}
