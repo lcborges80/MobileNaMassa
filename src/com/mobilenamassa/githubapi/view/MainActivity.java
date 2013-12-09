@@ -1,7 +1,5 @@
 package com.mobilenamassa.githubapi.view;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -26,7 +24,9 @@ public class MainActivity extends Activity {
 	private Button verifyCommits;
 	private LinearLayout resultContainer;
 	private TextView numberOfCommitsForPeriod;
+	private TextView commitsResult;
 	private AlertDialog downloadMessage;
+	private int numberOfCommits;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +36,7 @@ public class MainActivity extends Activity {
 		this.verifyCommits = (Button) findViewById(R.id.verifyCommits);
 		this.resultContainer = (LinearLayout) findViewById(R.id.resultContainer);
 		this.numberOfCommitsForPeriod = (TextView) findViewById(R.id.numberOfCommitsForPeriod);
+		this.commitsResult = (TextView) findViewById(R.id.commitsResult);
 		this.downloadMessage = createDialog(getResources().getString(R.string.dialogDownload));
 	}
 
@@ -85,7 +86,8 @@ public class MainActivity extends Activity {
 						numberOfCommitsForPeriod.post(new Runnable() {
 
 							public void run() {
-								numberOfCommitsForPeriod.setText(commits == null ? "null" : String.valueOf(commits.length));
+								numberOfCommits = commits == null ? -1 : commits.length;
+								numberOfCommitsForPeriod.setText(numberOfCommits == -1 ? "null" : String.valueOf(numberOfCommits));
 							}
 
 						});
@@ -94,6 +96,7 @@ public class MainActivity extends Activity {
 						numberOfCommitsForPeriod.post(new Runnable() {
 
 							public void run() {
+								numberOfCommits = -1;
 								numberOfCommitsForPeriod.setText(exception.toString());
 							}
 
@@ -106,6 +109,21 @@ public class MainActivity extends Activity {
 				@Override
 				protected void onPostExecute(Void result) {
 					downloadMessage.dismiss();
+					if (numberOfCommits > -1) {
+						
+						int frequency = Integer.parseInt(sharedPreferences.getString(SettingsActivity.FREQUENCY, "0"));
+						if (numberOfCommits == frequency) {
+							commitsResult.setText(R.string.equalsThanCommitsLimit);
+							
+						} else if (numberOfCommits > frequency) {
+							commitsResult.setText(R.string.moreThanCommitsLimit);
+							
+						} else {
+							commitsResult.setText(R.string.lessThanCommitsLimit);
+							
+						}
+					}
+					
 					verifyCommits.setEnabled(true);
 					resultContainer.setVisibility(View.VISIBLE);
 				}

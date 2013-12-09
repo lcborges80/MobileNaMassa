@@ -36,6 +36,14 @@
 	        android:textStyle="bold"
 	        android:textSize="80sp"
 	        android:layout_marginBottom="20dp">
+	    </TextView>
+	    
+	    <TextView
+	        android:id="@+id/commitsResult"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textStyle="bold"
+	        android:textSize="20sp">
 	    </TextView>        
         
     </LinearLayout>
