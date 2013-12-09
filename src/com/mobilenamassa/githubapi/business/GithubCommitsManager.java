@@ -6,6 +6,7 @@ import java.util.Date;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.gson.Gson;
@@ -84,9 +85,11 @@ public class GithubCommitsManager {
 			throw new IllegalArgumentException(this.context.getResources().getString(R.string.urlIllegalArgumentException));
 		}
 		try {
-			HttpRequest httpRequest = HttpRequest.get(url, true, "since", startDate);
+			HttpRequest httpRequest = HttpRequest.get(url, true, "since", startDate, "author", "");
 			httpRequest.basic(this.username, password);
 			String result = httpRequest.body();
+			Log.i("MyTag", "response code: " + httpRequest.code());
+			Log.i("MyTag", "response headers: " + httpRequest.headers());
 			Gson gson = new Gson();
 			return gson.fromJson(result, Commits[].class);
 		} catch (Exception exception) {
