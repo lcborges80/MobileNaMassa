@@ -77,12 +77,13 @@ public class MainActivity extends Activity {
 					int period = sharedPreferences.getInt(SettingsActivity.PERIOD, 0);
 					String username = sharedPreferences.getString(SettingsActivity.USERNAME, "");
 					String password = sharedPreferences.getString(SettingsActivity.PASSWORD, "");
+					String author = sharedPreferences.getString(SettingsActivity.AUTHOR, "");
 					String repository = sharedPreferences.getString(SettingsActivity.REPOSITORY, "");
 					String startDate = githubCommitsManager.getStartDateISO8601Format(period);
-					String url = githubCommitsManager.createUrl(username, repository);
+					String url = githubCommitsManager.createUrl(repository);
 
 					try {
-						final Commits[] commits = githubCommitsManager.getCommitsForPeriod(url, password, startDate);
+						final Commits[] commits = githubCommitsManager.getCommitsForPeriod(url, author, startDate);
 						numberOfCommitsForPeriod.post(new Runnable() {
 
 							public void run() {

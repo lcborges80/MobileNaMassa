@@ -12,11 +12,13 @@
 	<string name="usernameTextViewText">Username:</string>
 	<string name="passwordTextViewText">Password:</string>
 	<string name="repositoryTextViewText">Repository:</string>
+	<string name="authorTextViewText">Author:</string>
 	<string name="usernameEditTextHint">Please, type your Github username</string>
 	<string name="passwordEditTextHint">Please, type your Github password</string>
 	<string name="repositoryEditTextHint">Please, type your repository on Github</string>
+	<string name="authorEditTextHint">Please, type the commits author</string>
 	<string name="saveButtonText">Save</string>
-	<string name="usernamePasswordRepositoryFrequencyMandatoryMessage">Please, fill the username, password, repository and frequency fields.</string>
+	<string name="usernamePasswordRepositoryFrequencyMandatoryMessage">Please, fill the author, repository and frequency fields.</string>
 	<string name="settingsMenu">Settings</string>
 	<string name="periodTextViewText">Period:</string>
 	<string name="frequencyTextViewText">Frequency on Period:</string>

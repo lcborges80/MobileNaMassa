@@ -67,7 +67,11 @@ public class GithubCommitsManager {
 		return null;
 	}
 
-	public String createUrl(String username, String repository) throws IllegalArgumentException {
+	public String createUrl(String repository) throws IllegalArgumentException {
+		return createUrl("lcborges80", repository);
+	}
+	
+	private String createUrl(String username, String repository) throws IllegalArgumentException {
 		if (TextUtils.isEmpty(username) || TextUtils.isEmpty(repository)) {
 			throw new IllegalArgumentException(this.context.getResources().getString(R.string.urlIllegalArgumentException));
 		}
@@ -79,15 +83,20 @@ public class GithubCommitsManager {
 		urlBuffer.append("/commits");
 		return urlBuffer.toString();
 	}
+	
+	public Commits[] getCommitsForPeriod(String url, String author, String startDate) throws IllegalArgumentException, Exception {
+		return getCommitsForPeriod(url, "gibson20", author, startDate);
+	}
 
-	public Commits[] getCommitsForPeriod(String url, String password, String startDate) throws IllegalArgumentException, Exception {
-		if (TextUtils.isEmpty(url) || TextUtils.isEmpty(password) || TextUtils.isEmpty(startDate)) {
+	private Commits[] getCommitsForPeriod(String url, String password, String author, String startDate) throws IllegalArgumentException, Exception {
+		if (TextUtils.isEmpty(url) || TextUtils.isEmpty(password) || TextUtils.isEmpty(author) || TextUtils.isEmpty(startDate)) {
 			throw new IllegalArgumentException(this.context.getResources().getString(R.string.urlIllegalArgumentException));
 		}
 		try {
-			HttpRequest httpRequest = HttpRequest.get(url, true, "since", startDate, "author", "");
+			HttpRequest httpRequest = HttpRequest.get(url, true, "since", startDate, "author", author);
 			httpRequest.basic(this.username, password);
 			String result = httpRequest.body();
+			Log.i("MyTag", "url: " + url);
 			Log.i("MyTag", "response code: " + httpRequest.code());
 			Log.i("MyTag", "response headers: " + httpRequest.headers());
 			Gson gson = new Gson();
