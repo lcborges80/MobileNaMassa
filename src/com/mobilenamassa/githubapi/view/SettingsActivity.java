@@ -16,6 +16,7 @@ public class SettingsActivity extends Activity {
 	public static final String MY_SHAREDPREFERENCES = "MySharedPreferences";
 	public static final String USERNAME = "username";
 	public static final String PASSWORD = "password";
+	public static final String OWNER = "owner";
 	public static final String AUTHOR = "author";
 	public static final String REPOSITORY = "reposotory";
 	public static final String PERIOD = "period";
@@ -24,8 +25,9 @@ public class SettingsActivity extends Activity {
 	private SharedPreferences sharedPreferences;
 	private EditText username;
 	private EditText password;
-	private EditText repository;
+	private EditText owner;
 	private EditText author;
+	private EditText repository;
 	private Spinner period;
 	private EditText frequency;
 
@@ -39,6 +41,7 @@ public class SettingsActivity extends Activity {
 		this.password = (EditText) findViewById(R.id.password);
 		saveUsernameAndPasswordWithDefaultValues();
 		
+		this.owner = (EditText) findViewById(R.id.owner);
 		this.author = (EditText) findViewById(R.id.author);
 		this.repository = (EditText) findViewById(R.id.respository);
 		this.period = (Spinner) findViewById(R.id.period);
@@ -56,6 +59,7 @@ public class SettingsActivity extends Activity {
 	private void loadValues() {
 		this.username.setText(this.sharedPreferences.getString(USERNAME, ""));
 		this.password.setText(this.sharedPreferences.getString(PASSWORD, ""));
+		this.owner.setText(this.sharedPreferences.getString(OWNER, ""));
 		this.author.setText(this.sharedPreferences.getString(AUTHOR, ""));
 		this.repository.setText(this.sharedPreferences.getString(REPOSITORY, ""));
 		this.period.setSelection(this.sharedPreferences.getInt(PERIOD, 0));
@@ -63,12 +67,13 @@ public class SettingsActivity extends Activity {
 	}
 
 	public void save(View view) {
-		if (TextUtils.isEmpty(this.username.getText()) || TextUtils.isEmpty(this.password.getText()) || TextUtils.isEmpty(this.author.getText()) || TextUtils.isEmpty(this.repository.getText()) || TextUtils.isEmpty(this.frequency.getText())) {
-			Toast.makeText(this, getResources().getString(R.string.usernamePasswordRepositoryFrequencyMandatoryMessage), Toast.LENGTH_LONG).show();
+		if (TextUtils.isEmpty(this.username.getText()) || TextUtils.isEmpty(this.password.getText()) || TextUtils.isEmpty(this.owner.getText()) || TextUtils.isEmpty(this.author.getText()) || TextUtils.isEmpty(this.repository.getText()) || TextUtils.isEmpty(this.frequency.getText())) {
+			Toast.makeText(this, getResources().getString(R.string.incompletedFields), Toast.LENGTH_LONG).show();
 		} else {
 			SharedPreferences.Editor editor = this.sharedPreferences.edit();
 			editor.putString(USERNAME, this.username.getText().toString());
 			editor.putString(PASSWORD, this.password.getText().toString());
+			editor.putString(OWNER, this.owner.getText().toString());
 			editor.putString(AUTHOR, this.author.getText().toString());
 			editor.putString(REPOSITORY, this.repository.getText().toString());
 			editor.putInt(PERIOD, this.period.getSelectedItemPosition());

@@ -22,6 +22,7 @@ public class MainActivity extends Activity {
 
 	private SharedPreferences sharedPreferences;
 	private Button verifyCommits;
+	private TextView apiResult;
 	private LinearLayout resultContainer;
 	private TextView numberOfCommitsForPeriod;
 	private TextView commitsResult;
@@ -33,6 +34,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity);
 		this.sharedPreferences = getSharedPreferences(SettingsActivity.MY_SHAREDPREFERENCES, MODE_PRIVATE);
+		this.apiResult = (TextView) findViewById(R.id.apiResult);
 		this.verifyCommits = (Button) findViewById(R.id.verifyCommits);
 		this.resultContainer = (LinearLayout) findViewById(R.id.resultContainer);
 		this.numberOfCommitsForPeriod = (TextView) findViewById(R.id.numberOfCommitsForPeriod);
@@ -60,76 +62,105 @@ public class MainActivity extends Activity {
 		if (this.sharedPreferences.getAll().isEmpty()) {
 			Toast.makeText(this, getResources().getString(R.string.noSettingsMessage), Toast.LENGTH_LONG).show();
 		} else {
+			
+			int period = sharedPreferences.getInt(SettingsActivity.PERIOD, 0);
+			String owner = sharedPreferences.getString(SettingsActivity.OWNER, "");
+			String repository = sharedPreferences.getString(SettingsActivity.REPOSITORY, "");
+			String author = sharedPreferences.getString(SettingsActivity.AUTHOR, "");
 
-			new AsyncTask<Void, Void, Void>() {
+			GithubCommitsManager githubCommitsManager = new GithubCommitsManager(this);
 
-				@Override
-				protected void onPreExecute() {
-					super.onPreExecute();
-					verifyCommits.setEnabled(false);
-					downloadMessage.show();
-				}
-
-				@Override
-				protected Void doInBackground(Void... params) {
-
-					GithubCommitsManager githubCommitsManager = new GithubCommitsManager(MainActivity.this);
-					int period = sharedPreferences.getInt(SettingsActivity.PERIOD, 0);
-					String username = sharedPreferences.getString(SettingsActivity.USERNAME, "");
-					String password = sharedPreferences.getString(SettingsActivity.PASSWORD, "");
-					String author = sharedPreferences.getString(SettingsActivity.AUTHOR, "");
-					String repository = sharedPreferences.getString(SettingsActivity.REPOSITORY, "");
-					String startDate = githubCommitsManager.getStartDateISO8601Format(period);
-					String url = githubCommitsManager.createUrl(repository);
-
-					try {
-						final Commits[] commits = githubCommitsManager.getCommitsForPeriod(url, author, startDate);
-						numberOfCommitsForPeriod.post(new Runnable() {
-
-							public void run() {
-								numberOfCommits = commits == null ? -1 : commits.length;
-								numberOfCommitsForPeriod.setText(numberOfCommits == -1 ? "null" : String.valueOf(numberOfCommits));
-							}
-
-						});
-
-					} catch (final Exception exception) {
-						numberOfCommitsForPeriod.post(new Runnable() {
-
-							public void run() {
-								numberOfCommits = -1;
-								numberOfCommitsForPeriod.setText(exception.toString());
-							}
-
-						});
-
-					}
-					return null;
-				}
-
-				@Override
-				protected void onPostExecute(Void result) {
-					downloadMessage.dismiss();
-					if (numberOfCommits > -1) {
-						int frequency = Integer.parseInt(sharedPreferences.getString(SettingsActivity.FREQUENCY, "0"));
-						if (numberOfCommits == frequency) {
-							commitsResult.setText(R.string.equalsThanCommitsLimit);
-							commitsResult.setTextColor(getResources().getColor(R.color.yellow));
-						} else if (numberOfCommits > frequency) {
-							commitsResult.setText(R.string.moreThanCommitsLimit);
-							commitsResult.setTextColor(getResources().getColor(R.color.green));
-						} else {
-							commitsResult.setText(R.string.lessThanCommitsLimit);
-							commitsResult.setTextColor(getResources().getColor(R.color.red));
-						}
-					}					
-					verifyCommits.setEnabled(true);
-					resultContainer.setVisibility(View.VISIBLE);
-				}
-
-			}.execute();
-
+			String startDate = githubCommitsManager.getStartDateISO8601Format(period);
+			String url = githubCommitsManager.createUrl(owner, repository);
+			githubCommitsManager.showCommitsForPeriod(this.apiResult, url, author, startDate);
+			
 		}
+
+		// if (this.sharedPreferences.getAll().isEmpty()) {
+		// Toast.makeText(this,
+		// getResources().getString(R.string.noSettingsMessage),
+		// Toast.LENGTH_LONG).show();
+		// } else {
+		//
+		// new AsyncTask<Void, Void, Void>() {
+		//
+		// @Override
+		// protected void onPreExecute() {
+		// super.onPreExecute();
+		// verifyCommits.setEnabled(false);
+		// downloadMessage.show();
+		// }
+		//
+		// @Override
+		// protected Void doInBackground(Void... params) {
+		//
+		// GithubCommitsManager githubCommitsManager = new
+		// GithubCommitsManager(MainActivity.this);
+		// int period = sharedPreferences.getInt(SettingsActivity.PERIOD, 0);
+		// String username =
+		// sharedPreferences.getString(SettingsActivity.USERNAME, "");
+		// String password =
+		// sharedPreferences.getString(SettingsActivity.PASSWORD, "");
+		// String author = sharedPreferences.getString(SettingsActivity.AUTHOR,
+		// "");
+		// String repository =
+		// sharedPreferences.getString(SettingsActivity.REPOSITORY, "");
+		// String startDate =
+		// githubCommitsManager.getStartDateISO8601Format(period);
+		// String url = githubCommitsManager.createUrl(repository);
+		//
+		// try {
+		// final Commits[] commits =
+		// githubCommitsManager.getCommitsForPeriod(url, author, startDate);
+		// numberOfCommitsForPeriod.post(new Runnable() {
+		//
+		// public void run() {
+		// numberOfCommits = commits == null ? -1 : commits.length;
+		// numberOfCommitsForPeriod.setText(numberOfCommits == -1 ? "null" :
+		// String.valueOf(numberOfCommits));
+		// }
+		//
+		// });
+		//
+		// } catch (final Exception exception) {
+		// numberOfCommitsForPeriod.post(new Runnable() {
+		//
+		// public void run() {
+		// numberOfCommits = -1;
+		// numberOfCommitsForPeriod.setText(exception.toString());
+		// }
+		//
+		// });
+		//
+		// }
+		// return null;
+		// }
+		//
+		// @Override
+		// protected void onPostExecute(Void result) {
+		// downloadMessage.dismiss();
+		// if (numberOfCommits > -1) {
+		// int frequency =
+		// Integer.parseInt(sharedPreferences.getString(SettingsActivity.FREQUENCY,
+		// "0"));
+		// if (numberOfCommits == frequency) {
+		// commitsResult.setText(R.string.equalsThanCommitsLimit);
+		// commitsResult.setTextColor(getResources().getColor(R.color.yellow));
+		// } else if (numberOfCommits > frequency) {
+		// commitsResult.setText(R.string.moreThanCommitsLimit);
+		// commitsResult.setTextColor(getResources().getColor(R.color.green));
+		// } else {
+		// commitsResult.setText(R.string.lessThanCommitsLimit);
+		// commitsResult.setTextColor(getResources().getColor(R.color.red));
+		// }
+		// }
+		// verifyCommits.setEnabled(true);
+		// resultContainer.setVisibility(View.VISIBLE);
+		// }
+		//
+		// }.execute();
+		//
+		// }
 
 	}
 

@@ -11,14 +11,16 @@
 	<string name="verifyCommitsOnGithubButtonText">Verify Commits on Github</string>
 	<string name="usernameTextViewText">Username:</string>
 	<string name="passwordTextViewText">Password:</string>
+	<string name="ownerTextViewText">Owner:</string>
 	<string name="repositoryTextViewText">Repository:</string>
 	<string name="authorTextViewText">Author:</string>
 	<string name="usernameEditTextHint">Please, type your Github username</string>
 	<string name="passwordEditTextHint">Please, type your Github password</string>
+	<string name="ownerEditTextHint">Please, type the repository owner</string>
 	<string name="repositoryEditTextHint">Please, type your repository on Github</string>
 	<string name="authorEditTextHint">Please, type the commits author</string>
 	<string name="saveButtonText">Save</string>
-	<string name="usernamePasswordRepositoryFrequencyMandatoryMessage">Please, fill the author, repository and frequency fields.</string>
+	<string name="incompletedFields">Please, fill the owwer, author, repository and frequency fields.</string>
 	<string name="settingsMenu">Settings</string>
 	<string name="periodTextViewText">Period:</string>
 	<string name="frequencyTextViewText">Frequency on Period:</string>
@@ -32,5 +34,6 @@
 	<string name="moreThanCommitsLimit">More commits than the limit!</string>
 	<string name="equalsThanCommitsLimit">Number of commits is the same of the limit!</string>
 	<string name="lessThanCommitsLimit">Less commits than the limit!</string>
+	<string name="connectionError">Connection error, please try again.</string>
 
 </resources>

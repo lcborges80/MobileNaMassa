@@ -4,9 +4,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.gson.Gson;
@@ -19,10 +22,23 @@ public class GithubCommitsManager {
 	public static final int WEEKLY_PERIOD = 1;
 	public static final int MONTHLY_PERIOD = 2;
 	private Context context;
-	private String username;
+	private String username = "mnmworkshop";
+	private String pasword = "mnm_pass2013";
+	private ProgressDialog progressDialog;
+
+	public static final String TAG = "MyTag";
 
 	public GithubCommitsManager(Context context) {
 		this.context = context;
+		this.progressDialog = createDialog(this.context.getResources().getString(R.string.dialogDownload));
+	}
+
+	private ProgressDialog createDialog(String message) {
+		ProgressDialog progressDialog = new ProgressDialog(this.context);
+		progressDialog.setTitle(R.string.dialogTitle);
+		progressDialog.setMessage(message);
+		progressDialog.setIndeterminate(true);
+		return progressDialog;
 	}
 
 	public String getStartDateISO8601Format(int period) throws IllegalArgumentException {
@@ -67,43 +83,64 @@ public class GithubCommitsManager {
 		return null;
 	}
 
-	public String createUrl(String repository) throws IllegalArgumentException {
-		return createUrl("lcborges80", repository);
-	}
-	
-	private String createUrl(String username, String repository) throws IllegalArgumentException {
-		if (TextUtils.isEmpty(username) || TextUtils.isEmpty(repository)) {
+	public String createUrl(String owner, String repository) throws IllegalArgumentException {
+		if (TextUtils.isEmpty(owner) || TextUtils.isEmpty(repository)) {
 			throw new IllegalArgumentException(this.context.getResources().getString(R.string.urlIllegalArgumentException));
 		}
-		this.username = username;
 		StringBuilder urlBuffer = new StringBuilder("https://api.github.com/repos/");
-		urlBuffer.append(this.username);
+		urlBuffer.append(owner);
 		urlBuffer.append('/');
 		urlBuffer.append(repository);
 		urlBuffer.append("/commits");
 		return urlBuffer.toString();
 	}
-	
-	public Commits[] getCommitsForPeriod(String url, String author, String startDate) throws IllegalArgumentException, Exception {
-		return getCommitsForPeriod(url, "gibson20", author, startDate);
-	}
 
-	private Commits[] getCommitsForPeriod(String url, String password, String author, String startDate) throws IllegalArgumentException, Exception {
-		if (TextUtils.isEmpty(url) || TextUtils.isEmpty(password) || TextUtils.isEmpty(author) || TextUtils.isEmpty(startDate)) {
+	public Commits[] getCommitsForPeriod(String url, String author, String startDate) throws IllegalArgumentException, Exception {
+		if (TextUtils.isEmpty(url) || TextUtils.isEmpty(author) || TextUtils.isEmpty(startDate)) {
 			throw new IllegalArgumentException(this.context.getResources().getString(R.string.urlIllegalArgumentException));
 		}
-		try {
-			HttpRequest httpRequest = HttpRequest.get(url, true, "since", startDate, "author", author);
-			httpRequest.basic(this.username, password);
-			String result = httpRequest.body();
-			Log.i("MyTag", "url: " + url);
-			Log.i("MyTag", "response code: " + httpRequest.code());
-			Log.i("MyTag", "response headers: " + httpRequest.headers());
-			Gson gson = new Gson();
-			return gson.fromJson(result, Commits[].class);
-		} catch (Exception exception) {
-			throw exception;
-		}
+		HttpRequest httpRequest = HttpRequest.get(url, true, "since", startDate, "author", author);
+		httpRequest.basic(this.username, this.pasword);
+		String result = httpRequest.body();
+		Log.i(TAG, "url: " + url);
+		Log.i(TAG, "response code: " + httpRequest.code());
+		Log.i(TAG, "response headers: " + httpRequest.headers());
+		Log.i(TAG, "response body: " + result);
+		Gson gson = new Gson();
+		return gson.fromJson(result, Commits[].class);
+	}
+
+	public void showCommitsForPeriod(final TextView textView, final String url, final String author, final String startDate) {
+		new AsyncTask<Void, Void, Commits[]>() {
+
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+				progressDialog.show();
+			}
+
+			@Override
+			protected Commits[] doInBackground(Void... params) {
+				try {
+					return getCommitsForPeriod(url, author, startDate);
+				} catch (final Exception exception) {
+					return null;
+				}
+			}
+
+			@Override
+			protected void onPostExecute(final Commits[] commits) {
+				if (commits == null) {
+					textView.setText(context.getResources().getString(R.string.connectionError));
+				} else {
+					textView.setText(String.valueOf(commits.length));
+				}
+				Log.i(TAG, "result on textView: " + textView.getText().toString());
+				progressDialog.dismiss();
+			}
+
+		}.execute();
+
 	}
 
 }

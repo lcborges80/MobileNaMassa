@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:inputType="text"
         android:hint="@string/usernameEditTextHint"
-        android:text="lcborges80"
+        android:text="mnmworkshop"
         android:visibility="gone">
     </EditText>
     
@@ -34,8 +34,23 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:hint="@string/passwordEditTextHint"
-        android:text="gibson20"
+        android:text="mnm_pass2013"
         android:visibility="gone">
+    </EditText>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ownerTextViewText"
+        android:visibility="gone">
+    </TextView>
+    
+    <EditText
+        android:id="@+id/owner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/ownerEditTextHint">
     </EditText>
     
     <TextView
