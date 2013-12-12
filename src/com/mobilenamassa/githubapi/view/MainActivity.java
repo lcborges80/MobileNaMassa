@@ -66,6 +66,7 @@ public class MainActivity extends Activity {
 			int period = sharedPreferences.getInt(SettingsActivity.PERIOD, 0);
 			String owner = sharedPreferences.getString(SettingsActivity.OWNER, "");
 			String repository = sharedPreferences.getString(SettingsActivity.REPOSITORY, "");
+			
 			String author = sharedPreferences.getString(SettingsActivity.AUTHOR, "");
 
 			GithubCommitsManager githubCommitsManager = new GithubCommitsManager(this);
