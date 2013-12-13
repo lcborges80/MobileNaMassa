@@ -50,12 +50,12 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menuSettings:
+//		switch (item.getItemId()) {
+//		case R.id.menuSettings:
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
-		}
-		return false;
+//		}
+//		return false;
 	}
 
 	public void verifyCommits(View view) {
