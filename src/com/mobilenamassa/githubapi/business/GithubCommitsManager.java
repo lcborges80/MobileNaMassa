@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.gson.Gson;
+import com.mobilenamassa.githubapi.R;
 import com.mobilenamassa.githubapi.model.Commits;
 
 public class GithubCommitsManager {
@@ -29,24 +30,22 @@ public class GithubCommitsManager {
 
 	public GithubCommitsManager(Context context) {
 		this.context = context;
-		this.progressDialog = createDialog("Downloading commits...");
+		this.progressDialog = createProgressDialog();
 	}
 
-	private ProgressDialog createDialog(String message) {
+	private ProgressDialog createProgressDialog() {
 		ProgressDialog progressDialog = new ProgressDialog(this.context);
-		progressDialog.setTitle("Message");
-		progressDialog.setMessage(message);
+		progressDialog.setTitle(R.string.dialogTitle);
+		progressDialog.setMessage(this.context.getString(R.string.dialogDownload));
 		progressDialog.setIndeterminate(true);
 		return progressDialog;
 	}
 
 	public String getStartDateISO8601Format(int period) throws IllegalArgumentException {
 		if (period < DAILY_PERIOD || period > MONTHLY_PERIOD) {
-			throw new IllegalArgumentException("The period must be DAILY_PERIOD, WEEKLY_PERIOD or MONTHLY_PERIOD.");
-		}
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-		String result = simpleDateFormat.format(getStartDateFromPeriod(period));
-		return result;
+			throw new IllegalArgumentException(this.context.getString(R.string.periodIllegalArgumentException));
+		} 
+		return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(getStartDateFromPeriod(period));
 	}
 
 	private Calendar getCalendarWithZeroTime() {
@@ -84,7 +83,7 @@ public class GithubCommitsManager {
 
 	public String createUrl(String owner, String repository) throws IllegalArgumentException {
 		if (TextUtils.isEmpty(owner) || TextUtils.isEmpty(repository)) {
-			throw new IllegalArgumentException("None of the fields can be empty.");
+			throw new IllegalArgumentException(this.context.getString(R.string.urlIllegalArgumentException));
 		}
 		StringBuilder urlBuffer = new StringBuilder("https://api.github.com/repos/");
 		urlBuffer.append(owner);
@@ -96,7 +95,7 @@ public class GithubCommitsManager {
 
 	public Commits[] getCommitsForPeriod(String url, String author, String startDate) throws IllegalArgumentException, Exception {
 		if (TextUtils.isEmpty(url) || TextUtils.isEmpty(author) || TextUtils.isEmpty(startDate)) {
-			throw new IllegalArgumentException("None of the fields can be empty.");
+			throw new IllegalArgumentException(this.context.getString(R.string.urlIllegalArgumentException));
 		}
 		HttpRequest httpRequest = HttpRequest.get(url, true, "since", startDate, "author", author);
 		httpRequest.basic(this.username, this.pasword);
@@ -130,7 +129,7 @@ public class GithubCommitsManager {
 			@Override
 			protected void onPostExecute(final Commits[] commits) {
 				if (commits == null) {
-					textView.setText("Connection error, please try again.");
+					textView.setText(R.string.connectionError);
 				} else {
 					textView.setText(String.valueOf(commits.length));
 				}
